@@ -1,6 +1,5 @@
 package a481project.swiftkeys;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,8 +11,11 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import a481project.swiftkeys.BlueToothManager.BlueToothManager;
+
 public class SwiftKeys extends AppCompatActivity {
     public final static String EXTRA_MESSAGE = "com.example.SwiftKeys.MESSAGE";
+    public BlueToothManager blueToothManager;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -27,6 +29,11 @@ public class SwiftKeys extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+
+        blueToothManager = new BlueToothManager("b62c4e8d-62cc-404b-bbbf-bf3e3bbb1374");
+        blueToothManager.initiateConnection();
+
     }
 
    /* PeripheralManagerService manager = new PeripheralManagerService();
@@ -36,11 +43,14 @@ public class SwiftKeys extends AppCompatActivity {
      * Called when the user clicks the Send button
      */
     public void sendMessage(View view) {
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
         EditText editText = (EditText) findViewById(R.id.edit_message);
         String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+        blueToothManager.sendString(message);
+        //Intent intent = new Intent(this, DisplayMessageActivity.class);
+        //EditText editText = (EditText) findViewById(R.id.edit_message);
+        //String message = editText.getText().toString();
+        //intent.putExtra(EXTRA_MESSAGE, message);
+        //startActivity(intent);
     }
 
     /**

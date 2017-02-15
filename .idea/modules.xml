@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SwiftKeys.iml" filepath="$PROJECT_DIR$/SwiftKeys.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Footkey.iml" filepath="$PROJECT_DIR$/Footkey.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
