@@ -12,10 +12,12 @@ import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import a481project.swiftkeys.BlueToothManager.BlueToothManager;
+import a481project.swiftkeys.TextHandler.TextHandler;
 
 public class SwiftKeys extends AppCompatActivity {
     public final static String EXTRA_MESSAGE = "com.example.SwiftKeys.MESSAGE";
     public BlueToothManager blueToothManager;
+    public TextHandler textHandler;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -33,7 +35,10 @@ public class SwiftKeys extends AppCompatActivity {
 
         blueToothManager = new BlueToothManager("b62c4e8d-62cc-404b-bbbf-bf3e3bbb1374");
         blueToothManager.initiateConnection();
-
+        textHandler = new TextHandler(blueToothManager);
+        EditText editText = (EditText) findViewById(R.id.edit_message);
+        editText.setOnKeyListener(textHandler.getKeyListener());
+        editText.addTextChangedListener(textHandler.getTextWatcher());
     }
 
    /* PeripheralManagerService manager = new PeripheralManagerService();
@@ -46,6 +51,7 @@ public class SwiftKeys extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.edit_message);
         String message = editText.getText().toString();
         blueToothManager.sendString(message);
+        editText.setText("");
         //Intent intent = new Intent(this, DisplayMessageActivity.class);
         //EditText editText = (EditText) findViewById(R.id.edit_message);
         //String message = editText.getText().toString();

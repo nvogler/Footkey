@@ -72,7 +72,7 @@ public class BlueToothManager extends Activity {
                 ParcelUuid offeredUuid[] = device.getUuids();
                 for (ParcelUuid offUuid : offeredUuid) {
                     if (offUuid.toString().equals(MY_UUID.toString())) {
-                        mmDevice = device;
+                        mmDevice = mBluetoothAdapter.getRemoteDevice(device.getAddress());
                         isDeviceValid = true;
                         blueToothThread = new BlueToothThread();
                         blueToothThread.run();
@@ -115,7 +115,9 @@ public class BlueToothManager extends Activity {
                     // Connect to the remote device through the socket. This call blocks
                     // until it succeeds or throws an exception.
                     Boolean con = mmSocket.isConnected();
+                    Log.e(TAG, "Attempting connection");
                     mmSocket.connect();
+                    Log.e(TAG, "Connection attempt succeeded");
 
                 } catch (IOException connectException) {
                     Log.e(TAG, "Connection attempt failed. Retrying");
@@ -166,12 +168,21 @@ public class BlueToothManager extends Activity {
     public void sendString(String message) {
         KeyEvent[] events = mKeyCharacterMap.getEvents(message.toCharArray());
         for (KeyEvent event : events) {
-            write(event.getKeyCode());
+            write(event.getAction(), event.getKeyCode());
         }
     }
 
     public void write(int key) {
         byte[] bytes = ByteBuffer.allocate(4).putInt(key).array();
+        try {
+            mmOutStream.write(bytes);
+        } catch (IOException e) {
+
+        }
+    }
+
+    public void write(int action, int key) {
+        byte[] bytes = ByteBuffer.allocate(8).putInt(action).putInt(key).array();
         try {
             mmOutStream.write(bytes);
         } catch (IOException e) {
