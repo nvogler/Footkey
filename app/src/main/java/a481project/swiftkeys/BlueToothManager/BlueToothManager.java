@@ -35,23 +35,26 @@ public class BlueToothManager extends Activity {
 
     private static final KeyCharacterMap mKeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD);
 
-    private boolean isDeviceValid = false;
-    private boolean isSocketValid = false;
-    private boolean isConnectionValid = false;
-    private boolean hasConnectionBeenAttempted = false;
-    private boolean hasConnectionFailed = false;
-
     /**
      * @param uuid
      */
     public BlueToothManager(String uuid) {
         MY_UUID = java.util.UUID.fromString(uuid);
+        Log.i(TAG, "Set UUID to :" + MY_UUID);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(mBluetoothAdapter != null) {
+            Log.i(TAG, "Set Bluetooth Adaptor to :" + mBluetoothAdapter.getName());
+        }
+        else{
+            Log.e(TAG, "Failed to set Bluetooth Adaptor");
+        }
     }
 
     public boolean initiateConnection() {
         if (mBluetoothAdapter == null) {
+            Log.e(TAG, "Cannot connect, the adaptor is not set");
             return false;
+
         }
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -61,19 +64,16 @@ public class BlueToothManager extends Activity {
             TODO: add code about discovering new blue tooth devices
          */
 
-
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         if (pairedDevices.size() > 0) {
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : pairedDevices) {
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
                 device.fetchUuidsWithSdp();
                 ParcelUuid offeredUuid[] = device.getUuids();
                 for (ParcelUuid offUuid : offeredUuid) {
                     if (offUuid.toString().equals(MY_UUID.toString())) {
                         mmDevice = mBluetoothAdapter.getRemoteDevice(device.getAddress());
-                        isDeviceValid = true;
+                        Log.i(TAG, "attempting to connect to " + mmDevice.getName() + " : " + mmDevice.getAddress());
                         blueToothThread = new BlueToothThread();
                         blueToothThread.run();
                         break;
@@ -85,7 +85,7 @@ public class BlueToothManager extends Activity {
     }
 
     public boolean isConnectionReady() {
-        return isConnectionValid;
+        return mmSocket.isConnected();
     }
 
     private class BlueToothThread extends Thread {
@@ -101,11 +101,12 @@ public class BlueToothManager extends Activity {
             try {
                 // Get a BluetoothSocket to connect with the given BluetoothDevice.
                 // MY_UUID is the app's UUID string, also used in the server code.
+                Log.i(TAG, "Creating socket");
                 tmp = mmDevice.createRfcommSocketToServiceRecord(MY_UUID);
             } catch (IOException e) {
+                Log.d(TAG, "expection thrown when creating socket:",e);
                 return;
             }
-            isSocketValid = true;
             mmSocket = tmp;
         }
 
@@ -114,13 +115,12 @@ public class BlueToothManager extends Activity {
                 try {
                     // Connect to the remote device through the socket. This call blocks
                     // until it succeeds or throws an exception.
-                    Boolean con = mmSocket.isConnected();
-                    Log.e(TAG, "Attempting connection");
+                    Log.d(TAG, "Attempting connection");
                     mmSocket.connect();
-                    Log.e(TAG, "Connection attempt succeeded");
+                    Log.d(TAG, "Connection attempt succeeded");
 
                 } catch (IOException connectException) {
-                    Log.e(TAG, "Connection attempt failed. Retrying");
+                    Log.e(TAG, "Connection attempt failed. Retrying", connectException);
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException interruptedException) {
@@ -135,6 +135,7 @@ public class BlueToothManager extends Activity {
         private void getBlueToothStreams() {
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
+            Log.d(TAG, "Attempting to obtain streams");
             try {
                 tmpIn = mmSocket.getInputStream();
             } catch (IOException e) {
@@ -145,12 +146,13 @@ public class BlueToothManager extends Activity {
             } catch (IOException e) {
                 return;
             }
-            isConnectionValid = true;
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
         }
 
         private void readData() {
+            if(!mmSocket.isConnected()){return;}
+
             byte[] bytes = new byte[1024];
             int numBytes; // bytes returned from read()
             // Keep listening to the InputStream until an exception occurs.
