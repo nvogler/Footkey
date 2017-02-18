@@ -3,6 +3,7 @@ package a481project.swiftkeys;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -26,6 +27,7 @@ public class SwiftKeys extends AppCompatActivity {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String TAG = this.getClass().getName();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swift_keys);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -33,7 +35,8 @@ public class SwiftKeys extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
 
-        blueToothManager = new BlueToothManager("b62c4e8d-62cc-404b-bbbf-bf3e3bbb1374");
+        blueToothManager = new BlueToothManager("b62c4e8d-62cc-404b-bbbf-bf3e3bbb1376");//("7413bb3b-3ebf-bfbb-4b40-cc628d4e2cb6");//
+        Log.i(TAG, "Attempting to initiate connection.");
         blueToothManager.initiateConnection();
         textHandler = new TextHandler(blueToothManager);
         EditText editText = (EditText) findViewById(R.id.edit_message);

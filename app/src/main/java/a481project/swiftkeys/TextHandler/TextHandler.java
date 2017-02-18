@@ -42,8 +42,7 @@ public class TextHandler {
         @Override
         public void afterTextChanged(Editable s) {
             String text = s.toString();
-            if (s.length() != 0 && s.charAt(s.length() - 1) == ' ') {
-                mblueToothManager.sendString(text);
+            if (s.length() != 0 && s.charAt(s.length() - 1) == ' ') {mblueToothManager.sendString(text);
                 s.clear();
             }
         }

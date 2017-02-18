@@ -42,8 +42,12 @@ public class BlueToothManager extends Activity {
         MY_UUID = java.util.UUID.fromString(uuid);
         Log.i(TAG, "Set UUID to :" + MY_UUID);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(!mBluetoothAdapter.isEnabled()){
+            Log.i(TAG, "Bluetooth Adaptor is not enabled");
+        }
         if(mBluetoothAdapter != null) {
             Log.i(TAG, "Set Bluetooth Adaptor to :" + mBluetoothAdapter.getName());
+            Log.i(TAG, "Set Bluetooth Adaptor to :" + mBluetoothAdapter.getAddress());
         }
         else{
             Log.e(TAG, "Failed to set Bluetooth Adaptor");
@@ -51,12 +55,15 @@ public class BlueToothManager extends Activity {
     }
 
     public boolean initiateConnection() {
+        Log.i(TAG, "gg");
         if (mBluetoothAdapter == null) {
             Log.e(TAG, "Cannot connect, the adaptor is not set");
             return false;
 
         }
+        Log.i(TAG, "g");
         if (!mBluetoothAdapter.isEnabled()) {
+            Log.i(TAG, "Aag");
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
@@ -64,24 +71,47 @@ public class BlueToothManager extends Activity {
             TODO: add code about discovering new blue tooth devices
          */
 
+        Log.i(TAG, "gg");
+        Log.i(TAG, "# paired devices : " + mBluetoothAdapter.getBondedDevices().size());
+        if(mBluetoothAdapter.getBondedDevices().size() == 0){
+            Log.i(TAG, "Attempting to discover new devices");
+            mBluetoothAdapter.startDiscovery();
+        }
+        Log.i(TAG, "Iterating over paired devices");
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+        Log.i(TAG, "asd" + pairedDevices.toString());
+        Log.i(TAG, "device state " + mBluetoothAdapter.getState());
         if (pairedDevices.size() > 0) {
+            Log.i(TAG, "g");
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : pairedDevices) {
+                Log.i(TAG, "asdaswdqwe");
                 device.fetchUuidsWithSdp();
+                Log.i(TAG, "asdasdasd");
                 ParcelUuid offeredUuid[] = device.getUuids();
+                Log.i(TAG, "123" + device);
+                //Log.i(TAG, mmDevice.toString());
+                Log.i(TAG, offeredUuid.toString());
+                Log.i(TAG, "looking at to connect to "  + " : " + device.getAddress());
                 for (ParcelUuid offUuid : offeredUuid) {
+                    Log.i(TAG, "uuid offered" + offUuid.toString());
+                    mmDevice = mBluetoothAdapter.getRemoteDevice(device.getAddress());
+                    blueToothThread = new BlueToothThread();
+                    blueToothThread.run();
+                    break;
+                    /*
                     if (offUuid.toString().equals(MY_UUID.toString())) {
                         mmDevice = mBluetoothAdapter.getRemoteDevice(device.getAddress());
-                        Log.i(TAG, "attempting to connect to " + mmDevice.getName() + " : " + mmDevice.getAddress());
+                        Log.i(TAG, "attempting to connect to " + device.getName() + " : " + device.getAddress());
                         blueToothThread = new BlueToothThread();
                         blueToothThread.run();
                         break;
-                    }
+                    }*/
                 }
             }
         }
         return true;
+
     }
 
     public boolean isConnectionReady() {
