@@ -1,8 +1,10 @@
 package a481project.swiftkeys;
 
+import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -32,7 +34,6 @@ public class SwiftKeys extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swift_keys);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -51,7 +52,6 @@ public class SwiftKeys extends AppCompatActivity {
         editText.setOnKeyListener(textHandler.getKeyListener());
         editText.addTextChangedListener(textHandler.getTextWatcher());
     }
-
    /* PeripheralManagerService manager = new PeripheralManagerService();
     List<String> portList = manager.getGpioList();
     String message = Integer.toString(portList.size()); */
@@ -89,14 +89,15 @@ public class SwiftKeys extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        if(!blueToothManager.isConnectionReady()) {
-            Log.i(TAG, "Attempting to initiate connection.");
-            blueToothManager.initiateConnection();
-        }
+        //if(!blueToothManager.isConnectionReady()) {
+        //    Log.i(TAG, "Attempting to initiate connection.");
+        //    blueToothManager.initiateConnection();
+        //}
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
+
     }
 
     @Override
@@ -107,5 +108,9 @@ public class SwiftKeys extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
