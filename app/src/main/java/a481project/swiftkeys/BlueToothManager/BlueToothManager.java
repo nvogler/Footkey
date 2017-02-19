@@ -95,10 +95,7 @@ public class BlueToothManager extends Activity {
                 Log.i(TAG, "looking at to connect to "  + " : " + device.getAddress());
                 for (ParcelUuid offUuid : offeredUuid) {
                     Log.i(TAG, "uuid offered" + offUuid.toString());
-                    mmDevice = mBluetoothAdapter.getRemoteDevice(device.getAddress());
-                    blueToothThread = new BlueToothThread();
-                    blueToothThread.run();
-                    break;
+
                     /*
                     if (offUuid.toString().equals(MY_UUID.toString())) {
                         mmDevice = mBluetoothAdapter.getRemoteDevice(device.getAddress());
@@ -108,6 +105,9 @@ public class BlueToothManager extends Activity {
                         break;
                     }*/
                 }
+                mmDevice = mBluetoothAdapter.getRemoteDevice(device.getAddress());
+                blueToothThread = new BlueToothThread();
+                blueToothThread.run();
             }
         }
         return true;
@@ -115,7 +115,7 @@ public class BlueToothManager extends Activity {
     }
 
     public boolean isConnectionReady() {
-        return mmSocket.isConnected();
+        return mmSocket!= null && mmSocket.isConnected();
     }
 
     private class BlueToothThread extends Thread {
@@ -141,6 +141,7 @@ public class BlueToothManager extends Activity {
         }
 
         private void createBlueToothConnection() {
+            mBluetoothAdapter.cancelDiscovery();
             while (true) {
                 try {
                     // Connect to the remote device through the socket. This call blocks
@@ -181,7 +182,7 @@ public class BlueToothManager extends Activity {
         }
 
         private void readData() {
-            if(!mmSocket.isConnected()){return;}
+            if(!isConnectionReady()){return;}
 
             byte[] bytes = new byte[1024];
             int numBytes; // bytes returned from read()
@@ -198,6 +199,7 @@ public class BlueToothManager extends Activity {
     }
 
     public void sendString(String message) {
+        if(!isConnectionReady()){return;}
         KeyEvent[] events = mKeyCharacterMap.getEvents(message.toCharArray());
         for (KeyEvent event : events) {
             write(event.getAction(), event.getKeyCode());
@@ -205,6 +207,7 @@ public class BlueToothManager extends Activity {
     }
 
     public void write(int key) {
+        if(!isConnectionReady()){return;}
         byte[] bytes = ByteBuffer.allocate(4).putInt(key).array();
         try {
             mmOutStream.write(bytes);
@@ -214,9 +217,22 @@ public class BlueToothManager extends Activity {
     }
 
     public void write(int action, int key) {
+        if(!isConnectionReady()){return;}
         byte[] bytes = ByteBuffer.allocate(8).putInt(action).putInt(key).array();
         try {
             mmOutStream.write(bytes);
+        } catch (IOException e) {
+
+        }
+    }
+    public void deleteCharacters(int numDeletes){
+        if(!isConnectionReady()){return;}
+        ByteBuffer bytes = ByteBuffer.allocate(numDeletes * 16);
+        for(int i = 0; i < numDeletes; ++i){
+            bytes.putInt(KeyEvent.ACTION_DOWN).putInt(KeyEvent.KEYCODE_DEL).putInt(KeyEvent.ACTION_UP).putInt(KeyEvent.KEYCODE_DEL);
+        }
+        try {
+            mmOutStream.write(bytes.array());
         } catch (IOException e) {
 
         }

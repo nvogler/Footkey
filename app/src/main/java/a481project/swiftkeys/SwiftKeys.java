@@ -1,6 +1,10 @@
 package a481project.swiftkeys;
 
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,6 +20,7 @@ import a481project.swiftkeys.BlueToothManager.BlueToothManager;
 import a481project.swiftkeys.TextHandler.TextHandler;
 
 public class SwiftKeys extends AppCompatActivity {
+    private final String TAG = this.getClass().getName();
     public final static String EXTRA_MESSAGE = "com.example.SwiftKeys.MESSAGE";
     public BlueToothManager blueToothManager;
     public TextHandler textHandler;
@@ -24,20 +29,23 @@ public class SwiftKeys extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String TAG = this.getClass().getName();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swift_keys);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-
-        blueToothManager = new BlueToothManager("b62c4e8d-62cc-404b-bbbf-bf3e3bbb1376");//("7413bb3b-3ebf-bfbb-4b40-cc628d4e2cb6");//
-        Log.i(TAG, "Attempting to initiate connection.");
-        blueToothManager.initiateConnection();
+        if(blueToothManager == null) {
+            blueToothManager = new BlueToothManager("b62c4e8d-62cc-404b-bbbf-bf3e3bbb1376");//("7413bb3b-3ebf-bfbb-4b40-cc628d4e2cb6");//
+        }
+        if(!blueToothManager.isConnectionReady()) {
+            Log.i(TAG, "Attempting to initiate connection.");
+            blueToothManager.initiateConnection();
+        }
         textHandler = new TextHandler(blueToothManager);
         EditText editText = (EditText) findViewById(R.id.edit_message);
         editText.setOnKeyListener(textHandler.getKeyListener());
@@ -81,7 +89,10 @@ public class SwiftKeys extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
+        if(!blueToothManager.isConnectionReady()) {
+            Log.i(TAG, "Attempting to initiate connection.");
+            blueToothManager.initiateConnection();
+        }
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
