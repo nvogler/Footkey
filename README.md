@@ -46,7 +46,7 @@ OS: RaspAnd 6.0.1 <BR />
 <BR />
 Your Raspberry Pi 3 Model B is now configured for use with our application. Continue the steps below to load the necessary software on your PC. Application may work without this software, but behavorior and compatibility is indeterminate.<BR />
 
-**Footkeys Windows Application Installation (requires Visual Studio):**
+**Footkeys Windows Application Installation (requires Visual Studio):**<BR />
   https://github.com/mausilio/SwiftFootKeysWindowsApp
   - Clone the GitHub repository at the location above.<BR />
   - Open the .sln file<BR />
