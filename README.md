@@ -1,6 +1,5 @@
-Hardware: Raspberry Pi 3 Model B
-
-OS: RaspAnd 6.0.1
+Hardware: Raspberry Pi 3 Model B <BR />
+OS: RaspAnd 6.0.1 <BR />
   http://store.payloadz.com/details/2506110-software-home-and-desktop-raspand-6-0-1-for-raspberry-pi-3-and-pi-2-build-160915-faster-and-more-responsive-than-ever.html
 
 
