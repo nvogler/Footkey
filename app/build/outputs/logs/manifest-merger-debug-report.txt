@@ -1,0 +1,109 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:1:1-33:12
+	package
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:3:5-36
+		INJECTED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:1:11-69
+	android:versionCode
+		INJECTED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:5:5-67
+	android:name
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:5:22-64
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:6:5-81
+	android:name
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:6:22-78
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:7:5-76
+	android:name
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:7:22-73
+application
+ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:9:5-31:19
+MERGED from [com.android.support:appcompat-v7:25.3.0] C:\Users\Nic\.android\build-cache\66a6899c8a36474b9570455fc3c0463c2fd135b1\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-v4:25.3.0] C:\Users\Nic\.android\build-cache\708bda5e96994c706072de15a651d7b00461c8f3\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-fragment:25.3.0] C:\Users\Nic\.android\build-cache\78113f84708b9229053056770077de805c3a88af\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-media-compat:25.3.0] C:\Users\Nic\.android\build-cache\d46a9914aad620a271107fb162cdcb517aa70e02\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-core-ui:25.3.0] C:\Users\Nic\.android\build-cache\1ae5b4644c10f93743c7496a214c363527440476\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-core-utils:25.3.0] C:\Users\Nic\.android\build-cache\3ae0f8873352a8cf9083dbd5113e6d203c40c362\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:animated-vector-drawable:25.3.0] C:\Users\Nic\.android\build-cache\312ebe20bac6c032b4516c341e5183b553bb41e7\output\AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:support-vector-drawable:25.3.0] C:\Users\Nic\.android\build-cache\67873692e0f68f5abaaffd7f63805477723ea207\output\AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:support-compat:25.3.0] C:\Users\Nic\.android\build-cache\706db3d109377c0f1e22c43ffd967e07d18e21b6\output\AndroidManifest.xml:29:5-20
+	android:label
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:12:9-41
+	android:allowBackup
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:10:9-35
+	android:icon
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:11:9-43
+	android:theme
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:13:9-40
+activity#a481project.rpiscreen.MainActivity
+ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:14:9-23:20
+	android:label
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:17:13-45
+	android:launchMode
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:18:13-44
+	android:configChanges
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:16:13-122
+	android:name
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:15:13-41
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:19:13-22:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:20:17-69
+	android:name
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:20:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:21:17-77
+	android:name
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:21:27-74
+service#a481project.rpiscreen.CastService
+ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:25:9-30:19
+	android:enabled
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:28:13-35
+	android:process
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:27:13-38
+	android:exported
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:29:13-36
+	android:name
+		ADDED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml:26:13-40
+uses-sdk
+INJECTED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+MERGED from [com.android.support:appcompat-v7:25.3.0] C:\Users\Nic\.android\build-cache\66a6899c8a36474b9570455fc3c0463c2fd135b1\output\AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:support-v4:25.3.0] C:\Users\Nic\.android\build-cache\708bda5e96994c706072de15a651d7b00461c8f3\output\AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-fragment:25.3.0] C:\Users\Nic\.android\build-cache\78113f84708b9229053056770077de805c3a88af\output\AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-media-compat:25.3.0] C:\Users\Nic\.android\build-cache\d46a9914aad620a271107fb162cdcb517aa70e02\output\AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-core-ui:25.3.0] C:\Users\Nic\.android\build-cache\1ae5b4644c10f93743c7496a214c363527440476\output\AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-core-utils:25.3.0] C:\Users\Nic\.android\build-cache\3ae0f8873352a8cf9083dbd5113e6d203c40c362\output\AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:animated-vector-drawable:25.3.0] C:\Users\Nic\.android\build-cache\312ebe20bac6c032b4516c341e5183b553bb41e7\output\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:25.3.0] C:\Users\Nic\.android\build-cache\67873692e0f68f5abaaffd7f63805477723ea207\output\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:support-compat:25.3.0] C:\Users\Nic\.android\build-cache\706db3d109377c0f1e22c43ffd967e07d18e21b6\output\AndroidManifest.xml:21:5-23:58
+	tools:overrideLibrary
+		ADDED from [com.android.support:appcompat-v7:25.3.0] C:\Users\Nic\.android\build-cache\66a6899c8a36474b9570455fc3c0463c2fd135b1\output\AndroidManifest.xml:23:9-75
+	android:targetSdkVersion
+		INJECTED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Nic\Desktop\RPiScreen\app\src\main\AndroidManifest.xml
+meta-data#android.support.VERSION
+ADDED from [com.android.support:appcompat-v7:25.3.0] C:\Users\Nic\.android\build-cache\66a6899c8a36474b9570455fc3c0463c2fd135b1\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-v4:25.3.0] C:\Users\Nic\.android\build-cache\708bda5e96994c706072de15a651d7b00461c8f3\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-fragment:25.3.0] C:\Users\Nic\.android\build-cache\78113f84708b9229053056770077de805c3a88af\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-media-compat:25.3.0] C:\Users\Nic\.android\build-cache\d46a9914aad620a271107fb162cdcb517aa70e02\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-core-ui:25.3.0] C:\Users\Nic\.android\build-cache\1ae5b4644c10f93743c7496a214c363527440476\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-core-utils:25.3.0] C:\Users\Nic\.android\build-cache\3ae0f8873352a8cf9083dbd5113e6d203c40c362\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:animated-vector-drawable:25.3.0] C:\Users\Nic\.android\build-cache\312ebe20bac6c032b4516c341e5183b553bb41e7\output\AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:support-vector-drawable:25.3.0] C:\Users\Nic\.android\build-cache\67873692e0f68f5abaaffd7f63805477723ea207\output\AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:support-compat:25.3.0] C:\Users\Nic\.android\build-cache\706db3d109377c0f1e22c43ffd967e07d18e21b6\output\AndroidManifest.xml:25:5-27:34
+	android:value
+		ADDED from [com.android.support:appcompat-v7:25.3.0] C:\Users\Nic\.android\build-cache\66a6899c8a36474b9570455fc3c0463c2fd135b1\output\AndroidManifest.xml:27:9-31
+	android:name
+		ADDED from [com.android.support:appcompat-v7:25.3.0] C:\Users\Nic\.android\build-cache\66a6899c8a36474b9570455fc3c0463c2fd135b1\output\AndroidManifest.xml:26:9-47

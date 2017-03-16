@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\Nic\\Desktop\\RPiScreen\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\abc_edit_text_material.xml",
+        "source": "C:\\Users\\Nic\\.android\\build-cache\\66a6899c8a36474b9570455fc3c0463c2fd135b1\\output\\res\\drawable-v21\\abc_edit_text_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nic\\Desktop\\RPiScreen\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\abc_btn_colored_material.xml",
+        "source": "C:\\Users\\Nic\\.android\\build-cache\\66a6899c8a36474b9570455fc3c0463c2fd135b1\\output\\res\\drawable-v21\\abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nic\\Desktop\\RPiScreen\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\notification_action_background.xml",
+        "source": "C:\\Users\\Nic\\.android\\build-cache\\66a6899c8a36474b9570455fc3c0463c2fd135b1\\output\\res\\drawable-v21\\notification_action_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nic\\Desktop\\RPiScreen\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\abc_action_bar_item_background_material.xml",
+        "source": "C:\\Users\\Nic\\.android\\build-cache\\66a6899c8a36474b9570455fc3c0463c2fd135b1\\output\\res\\drawable-v21\\abc_action_bar_item_background_material.xml"
+    }
+]

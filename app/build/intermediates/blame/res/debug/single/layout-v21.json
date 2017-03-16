@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\Nic\\Desktop\\RPiScreen\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\Nic\\.android\\build-cache\\66a6899c8a36474b9570455fc3c0463c2fd135b1\\output\\res\\layout-v21\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nic\\Desktop\\RPiScreen\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\Nic\\.android\\build-cache\\66a6899c8a36474b9570455fc3c0463c2fd135b1\\output\\res\\layout-v21\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nic\\Desktop\\RPiScreen\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\Nic\\.android\\build-cache\\66a6899c8a36474b9570455fc3c0463c2fd135b1\\output\\res\\layout-v21\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nic\\Desktop\\RPiScreen\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\Nic\\.android\\build-cache\\66a6899c8a36474b9570455fc3c0463c2fd135b1\\output\\res\\layout-v21\\notification_action.xml"
+    }
+]
