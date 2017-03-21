@@ -10,6 +10,7 @@ import android.view.View;
 import java.util.Vector;
 
 import a481project.swiftkeys.BlueToothManager.BlueToothManager;
+import a481project.swiftkeys.ScreenClicker.ScreenClicker;
 
 /**
  * Created by Michael on 2/15/2017.
@@ -29,7 +30,12 @@ public class TextHandler {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             Log.i(TAG, "writing keycode : " + event.getKeyCode());
-            mblueToothManager.write(event.getAction(), event.getKeyCode());
+            if(ScreenClicker.isScreenClickKey(event.getKeyCode())){
+                ScreenClicker.handleScreenClickKey(event.getKeyCode(), event.getAction());
+            }
+            else {
+                mblueToothManager.write(event.getAction(), event.getKeyCode());
+            }
             return false;
         }
     };
