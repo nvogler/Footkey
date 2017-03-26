@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.media.MediaFormat;
 import android.media.projection.MediaProjectionManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,21 +46,6 @@ public class MainActivity extends Activity {
     private static final String PREF_KEY_RESOLUTION = "resolution";
     private static final String PREF_KEY_BITRATE = "bitrate";
 
-    private static final String[] FORMAT_OPTIONS = {
-            MediaFormat.MIMETYPE_VIDEO_AVC,
-            MediaFormat.MIMETYPE_VIDEO_VP8
-    };
-
-    private static final int[][] RESOLUTION_OPTIONS = {
-            {1280, 720, 320}
-    };
-
-    private static final int[] BITRATE_OPTIONS = {
-            4096000, // 4 Mbps
-            2048000, // 2 Mbps
-            1024000 // 1 Mbps
-    };
-
     private static final int REQUEST_MEDIA_PROJECTION = 100;
     private static final String STATE_RESULT_CODE = "result_code";
     private static final String STATE_RESULT_DATA = "result_data";
@@ -76,11 +59,6 @@ public class MainActivity extends Activity {
     private ListView mDiscoverListView;
     private ArrayAdapter<String> mDiscoverAdapter;
     private HashMap<String, String> mDiscoverdMap;
-    private String mSelectedFormat = FORMAT_OPTIONS[0];
-    private int mSelectedWidth = RESOLUTION_OPTIONS[0][0];
-    private int mSelectedHeight = RESOLUTION_OPTIONS[0][1];
-    private int mSelectedDpi = RESOLUTION_OPTIONS[0][2];
-    private int mSelectedBitrate = BITRATE_OPTIONS[0];
     private String mReceiverIp = "";
     private DiscoveryTask mDiscoveryTask;
     private int mResultCode;
@@ -165,70 +143,6 @@ public class MainActivity extends Activity {
         });
         ipEditText.setText(mContext.getSharedPreferences(PREF_COMMON, 0).getString(PREF_KEY_INPUT_RECEIVER, ""));
 
-        Spinner formatSpinner = (Spinner) findViewById(R.id.format_spinner);
-        ArrayAdapter<CharSequence> formatAdapter = ArrayAdapter.createFromResource(this,
-                R.array.format_options, android.R.layout.simple_spinner_item);
-        formatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        formatSpinner.setAdapter(formatAdapter);
-        formatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mSelectedFormat = FORMAT_OPTIONS[i];
-                mContext.getSharedPreferences(PREF_COMMON, 0).edit().putInt(PREF_KEY_FORMAT, i).commit();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                mSelectedFormat = FORMAT_OPTIONS[0];
-                mContext.getSharedPreferences(PREF_COMMON, 0).edit().putInt(PREF_KEY_FORMAT, 0).commit();
-            }
-        });
-        formatSpinner.setSelection(mContext.getSharedPreferences(PREF_COMMON, 0).getInt(PREF_KEY_FORMAT, 0));
-
-        Spinner resolutionSpinner = (Spinner) findViewById(R.id.resolution_spinner);
-        ArrayAdapter<CharSequence> resolutionAdapter = ArrayAdapter.createFromResource(this,
-                R.array.resolution_options, android.R.layout.simple_spinner_item);
-        resolutionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        resolutionSpinner.setAdapter(resolutionAdapter);
-        resolutionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mSelectedWidth = RESOLUTION_OPTIONS[i][0];
-                mSelectedHeight = RESOLUTION_OPTIONS[i][1];
-                mSelectedDpi = RESOLUTION_OPTIONS[i][2];
-                mContext.getSharedPreferences(PREF_COMMON, 0).edit().putInt(PREF_KEY_RESOLUTION, i).commit();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                mSelectedWidth = RESOLUTION_OPTIONS[0][0];
-                mSelectedHeight = RESOLUTION_OPTIONS[0][1];
-                mSelectedDpi = RESOLUTION_OPTIONS[0][2];
-                mContext.getSharedPreferences(PREF_COMMON, 0).edit().putInt(PREF_KEY_RESOLUTION, 0).commit();
-            }
-        });
-        resolutionSpinner.setSelection(mContext.getSharedPreferences(PREF_COMMON, 0).getInt(PREF_KEY_RESOLUTION, 0));
-
-        Spinner bitrateSpinner = (Spinner) findViewById(R.id.bitrate_spinner);
-        ArrayAdapter<CharSequence> bitrateAdapter = ArrayAdapter.createFromResource(this,
-                R.array.bitrate_options, android.R.layout.simple_spinner_item);
-        bitrateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        bitrateSpinner.setAdapter(bitrateAdapter);
-        bitrateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mSelectedBitrate = BITRATE_OPTIONS[i];
-                mContext.getSharedPreferences(PREF_COMMON, 0).edit().putInt(PREF_KEY_BITRATE, i).commit();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                mSelectedBitrate = BITRATE_OPTIONS[0];
-                mContext.getSharedPreferences(PREF_COMMON, 0).edit().putInt(PREF_KEY_BITRATE, 0).commit();
-            }
-        });
-        bitrateSpinner.setSelection(mContext.getSharedPreferences(PREF_COMMON, 0).getInt(PREF_KEY_BITRATE, 0));
-
         mReceiverIp = mContext.getSharedPreferences(PREF_COMMON, 0).getString(PREF_KEY_RECEIVER, "");
         updateReceiverStatus();
         startService();
@@ -264,9 +178,6 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -274,6 +185,7 @@ public class MainActivity extends Activity {
             Log.d(TAG, "==== start ====");
             if (mReceiverIp != null) {
                 startCaptureScreen();
+                //invalidateOptionsMenu();
             } else {
                 Toast.makeText(mContext, R.string.no_receiver, Toast.LENGTH_SHORT).show();
             }
@@ -281,6 +193,7 @@ public class MainActivity extends Activity {
         } else if (id == R.id.action_stop) {
             Log.d(TAG, "==== stop ====");
             stopScreenCapture();
+            //invalidateOptionsMenu();
             return true;
         }
 
@@ -314,6 +227,8 @@ public class MainActivity extends Activity {
     private void updateReceiverStatus() {
         if (mReceiverIp.length() > 0) {
             mReceiverTextView.setText(String.format(mContext.getString(R.string.receiver), mReceiverIp));
+        } else {
+            mReceiverTextView.setText(R.string.no_receiver);
         }
     }
 
@@ -335,7 +250,6 @@ public class MainActivity extends Activity {
         }
         final Intent stopCastIntent = new Intent(Common.ACTION_STOP_CAST);
         sendBroadcast(stopCastIntent);
-
     }
 
     private void startService() {
@@ -344,15 +258,9 @@ public class MainActivity extends Activity {
             intent.putExtra(Common.EXTRA_RESULT_CODE, mResultCode);
             intent.putExtra(Common.EXTRA_RESULT_DATA, mResultData);
             intent.putExtra(Common.EXTRA_RECEIVER_IP, mReceiverIp);
-            intent.putExtra(Common.EXTRA_VIDEO_FORMAT, mSelectedFormat);
-            intent.putExtra(Common.EXTRA_SCREEN_WIDTH, mSelectedWidth);
-            intent.putExtra(Common.EXTRA_SCREEN_HEIGHT, mSelectedHeight);
-            intent.putExtra(Common.EXTRA_SCREEN_DPI, mSelectedDpi);
-            intent.putExtra(Common.EXTRA_VIDEO_BITRATE, mSelectedBitrate);
             Log.d(TAG, "===== start service =====");
             startService(intent);
             bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
-            Log.d(TAG, "===== bound service =====");
         } else {
             Intent intent = new Intent(this, CastService.class);
             startService(intent);
@@ -382,11 +290,7 @@ public class MainActivity extends Activity {
                 Log.d(TAG, "Bind local port: " + discoverUdpSocket.getLocalPort());
                 discoverUdpSocket.setSoTimeout(3000);
                 byte[] buf = new byte[1024];
-
-                // Discover for 30 seconds...
-                long startTime = System.currentTimeMillis();
-                while(false||(System.currentTimeMillis()-startTime)<320000)
-                {
+                while (true) {
                     if (!Utils.sendBroadcastMessage(mContext, discoverUdpSocket, Common.DISCOVER_PORT, Common.DISCOVER_MESSAGE)) {
                         Log.w(TAG, "Failed to send discovery message");
                     }
@@ -413,7 +317,6 @@ public class MainActivity extends Activity {
                                     }
                                 });
                                 Log.d(TAG, "Got receiver name: " + name + ", ip: " + ip + ", width: " + width + ", height: " + height);
-                                break;
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -421,13 +324,14 @@ public class MainActivity extends Activity {
                     } catch (SocketTimeoutException e) {
                     }
 
-                    Thread.sleep(5000);
+                    Thread.sleep(3000);
                 }
-
             } catch (SocketException e) {
                 Log.d(TAG, "Failed to create socket for discovery");
                 e.printStackTrace();
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             return null;

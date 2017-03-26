@@ -60,11 +60,6 @@ public class CastService extends Service {
     private String mReceiverIp;
     private int mResultCode;
     private Intent mResultData;
-    private String mSelectedFormat;
-    private int mSelectedWidth;
-    private int mSelectedHeight;
-    private int mSelectedDpi;
-    private int mSelectedBitrate;
     private MediaProjection mMediaProjection;
     private VirtualDisplay mVirtualDisplay;
     private Surface mInputSurface;
@@ -159,14 +154,6 @@ public class CastService extends Service {
             return START_NOT_STICKY;
         }
 
-        mSelectedWidth = intent.getIntExtra(Common.EXTRA_SCREEN_WIDTH, Common.DEFAULT_SCREEN_WIDTH);
-        mSelectedHeight = intent.getIntExtra(Common.EXTRA_SCREEN_HEIGHT, Common.DEFAULT_SCREEN_HEIGHT);
-        mSelectedDpi = intent.getIntExtra(Common.EXTRA_SCREEN_DPI, Common.DEFAULT_SCREEN_DPI);
-        mSelectedBitrate = intent.getIntExtra(Common.EXTRA_VIDEO_BITRATE, Common.DEFAULT_VIDEO_BITRATE);
-        mSelectedFormat = intent.getStringExtra(Common.EXTRA_VIDEO_FORMAT);
-        if (mSelectedFormat == null) {
-            mSelectedFormat = Common.DEFAULT_VIDEO_MIME_TYPE;
-        }
         if (mReceiverIp.length() <= 0) {
             Log.d(TAG, "Start with listen mode");
             if (!createServerSocket()) {
@@ -232,8 +219,8 @@ public class CastService extends Service {
         prepareVideoEncoder();
 
         // Start the video input.
-        mVirtualDisplay = mMediaProjection.createVirtualDisplay("Recording Display", mSelectedWidth,
-                mSelectedHeight, mSelectedDpi, 0 /* flags */, mInputSurface,
+        mVirtualDisplay = mMediaProjection.createVirtualDisplay("Recording Display", Common.SCREEN_WIDTH,
+                Common.SCREEN_HEIGHT, Common.SCREEN_DPI, 0 /* flags */, mInputSurface,
                 null /* callback */, null /* handler */);
 
         // Start the encoders
@@ -242,12 +229,12 @@ public class CastService extends Service {
 
     private void prepareVideoEncoder() {
         mVideoBufferInfo = new MediaCodec.BufferInfo();
-        MediaFormat format = MediaFormat.createVideoFormat(mSelectedFormat, mSelectedWidth, mSelectedHeight);
-        int frameRate = Common.DEFAULT_VIDEO_FPS;
+        MediaFormat format = MediaFormat.createVideoFormat(Common.VIDEO_MIME_TYPE, Common.SCREEN_WIDTH, Common.SCREEN_HEIGHT);
+        int frameRate = Common.VIDEO_FPS;
 
         // Set some required properties. The media codec may fail if these aren't defined.
         format.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
-        format.setInteger(MediaFormat.KEY_BIT_RATE, mSelectedBitrate);
+        format.setInteger(MediaFormat.KEY_BIT_RATE, Common.VIDEO_BITRATE);
         format.setInteger(MediaFormat.KEY_FRAME_RATE, frameRate);
         format.setInteger(MediaFormat.KEY_CAPTURE_RATE, frameRate);
         format.setInteger(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, 1000000 / frameRate);
@@ -256,7 +243,7 @@ public class CastService extends Service {
 
         // Create a MediaCodec encoder and configure it. Get a Surface we can use for recording into.
         try {
-            mVideoEncoder = MediaCodec.createEncoderByType(mSelectedFormat);
+            mVideoEncoder = MediaCodec.createEncoderByType(Common.VIDEO_MIME_TYPE);
             mVideoEncoder.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
             mInputSurface = mVideoEncoder.createInputSurface();
             mVideoEncoder.start();
@@ -275,17 +262,22 @@ public class CastService extends Service {
                 // nothing available yet
                 break;
             } else if (bufferIndex == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
-
+                // should happen before receiving buffers, and should only happen once
+                //if (mTrackIndex >= 0) {
+                //    throw new RuntimeException("format changed twice");
+                //}
+                //mTrackIndex = mMuxer.addTrack(mVideoEncoder.getOutputFormat());
+                //if (!mMuxerStarted && mTrackIndex >= 0) {
+                //    mMuxer.start();
+                //    mMuxerStarted = true;
+                //}
+            } else if (bufferIndex < 0) {
+                // not sure what's going on, ignore it
             } else {
                 ByteBuffer encodedData = mVideoEncoder.getOutputBuffer(bufferIndex);
                 if (encodedData == null) {
                     throw new RuntimeException("couldn't fetch buffer at index " + bufferIndex);
                 }
-                // Fixes playability issues on certain h264 decoders including omxh264dec on raspberry pi
-                // See http://stackoverflow.com/a/26684736/4683709 for explanation
-                //if ((mVideoBufferInfo.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) {
-                //    mVideoBufferInfo.size = 0;
-                //}
 
                 if (mVideoBufferInfo.size != 0) {
                     encodedData.position(mVideoBufferInfo.offset);
@@ -294,7 +286,6 @@ public class CastService extends Service {
                         try {
                             byte[] b = new byte[encodedData.remaining()];
                             encodedData.get(b);
-
                             mSocketOutputStream.write(b);
 
                         } catch (IOException e) {
@@ -345,6 +336,7 @@ public class CastService extends Service {
             mMediaProjection.stop();
             mMediaProjection = null;
         }
+
         mVideoBufferInfo = null;
     }
 
@@ -388,29 +380,15 @@ public class CastService extends Service {
                     }
                     mSocketOutputStream = mClientSocket.getOutputStream();
                     OutputStreamWriter osw = new OutputStreamWriter(mSocketOutputStream);
-                    osw.write(String.format(HTTP_MESSAGE_TEMPLATE, mSelectedWidth, mSelectedHeight));
+                    osw.write(String.format(HTTP_MESSAGE_TEMPLATE, Common.SCREEN_WIDTH, Common.SCREEN_HEIGHT));
                     osw.flush();
                     mSocketOutputStream.flush();
-                    if (mSelectedFormat.equals(MediaFormat.MIMETYPE_VIDEO_AVC)) {
-                        if (mSelectedWidth == 1280 && mSelectedHeight == 720) {
-                            mSocketOutputStream.write(H264_PREDEFINED_HEADER_1280x720);
-                        } else {
-                            Log.e(TAG, "Unknown width: " + mSelectedWidth + ", height: " + mSelectedHeight);
-                            mSocketOutputStream.close();
-                            mClientSocket.close();
-                            mClientSocket = null;
-                            mSocketOutputStream = null;
-                        }
-                    } else {
-                        Log.e(TAG, "Unknown format: " + mSelectedFormat);
-                        mSocketOutputStream.close();
-                        mClientSocket.close();
-                        mClientSocket = null;
-                        mSocketOutputStream = null;
-                    }
+                    mSocketOutputStream.write(H264_PREDEFINED_HEADER_1280x720);
+
                     if (mSocketOutputStream != null) {
                         mHandler.post(mStartEncodingRunnable);
                     }
+
                     return;
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
@@ -432,26 +410,10 @@ public class CastService extends Service {
                     mSocket = new Socket(serverAddr, Common.VIEWER_PORT);
                     mSocketOutputStream = mSocket.getOutputStream();
                     OutputStreamWriter osw = new OutputStreamWriter(mSocketOutputStream);
-                    osw.write(String.format(HTTP_MESSAGE_TEMPLATE, mSelectedWidth, mSelectedHeight));
+                    osw.write(String.format(HTTP_MESSAGE_TEMPLATE, Common.SCREEN_WIDTH, Common.SCREEN_HEIGHT));
                     osw.flush();
                     mSocketOutputStream.flush();
-                    if (mSelectedFormat.equals(MediaFormat.MIMETYPE_VIDEO_AVC)) {
-                        if (mSelectedWidth == 1280 && mSelectedHeight == 720) {
-                            mSocketOutputStream.write(H264_PREDEFINED_HEADER_1280x720);
-                        } else {
-                            Log.e(TAG, "Unknown width: " + mSelectedWidth + ", height: " + mSelectedHeight);
-                            mSocketOutputStream.close();
-                            mSocket.close();
-                            mSocket = null;
-                            mSocketOutputStream = null;
-                        }
-                    } else {
-                        Log.e(TAG, "Unknown format: " + mSelectedFormat);
-                        mSocketOutputStream.close();
-                        mSocket.close();
-                        mSocket = null;
-                        mSocketOutputStream = null;
-                    }
+                    mSocketOutputStream.write(H264_PREDEFINED_HEADER_1280x720);
                     return;
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
