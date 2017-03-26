@@ -154,22 +154,13 @@ public class CastService extends Service {
             return START_NOT_STICKY;
         }
 
-        if (mReceiverIp.length() <= 0) {
-            Log.d(TAG, "Start with listen mode");
-            if (!createServerSocket()) {
-                Log.e(TAG, "Failed to create socket to receiver, ip: " + mReceiverIp);
-                return START_NOT_STICKY;
-            }
-        } else {
-            Log.d(TAG, "Start with client mode");
-            if (!createSocket()) {
-                Log.e(TAG, "Failed to create socket to receiver, ip: " + mReceiverIp);
-                return START_NOT_STICKY;
-            }
-            if (!startScreenCapture()) {
-                Log.e(TAG, "Failed to start capture screen");
-                return START_NOT_STICKY;
-            }
+        if (!createSocket()) {
+            Log.e(TAG, "Failed to create socket to receiver, ip: " + mReceiverIp);
+            return START_NOT_STICKY;
+        }
+        if (!startScreenCapture()) {
+            Log.e(TAG, "Failed to start capture screen");
+            return START_NOT_STICKY;
         }
         return START_STICKY;
     }
@@ -230,16 +221,15 @@ public class CastService extends Service {
     private void prepareVideoEncoder() {
         mVideoBufferInfo = new MediaCodec.BufferInfo();
         MediaFormat format = MediaFormat.createVideoFormat(Common.VIDEO_MIME_TYPE, Common.SCREEN_WIDTH, Common.SCREEN_HEIGHT);
-        int frameRate = Common.VIDEO_FPS;
 
         // Set some required properties. The media codec may fail if these aren't defined.
         format.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
         format.setInteger(MediaFormat.KEY_BIT_RATE, Common.VIDEO_BITRATE);
-        format.setInteger(MediaFormat.KEY_FRAME_RATE, frameRate);
-        format.setInteger(MediaFormat.KEY_CAPTURE_RATE, frameRate);
-        format.setInteger(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, 1000000 / frameRate);
+        format.setInteger(MediaFormat.KEY_FRAME_RATE, Common.VIDEO_FPS);
+        format.setInteger(MediaFormat.KEY_CAPTURE_RATE, Common.VIDEO_FPS);
+        format.setInteger(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, 1000000 / Common.VIDEO_FPS);
         format.setInteger(MediaFormat.KEY_CHANNEL_COUNT, 1);
-        format.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1); // 1 seconds between I-frames
+        format.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
 
         // Create a MediaCodec encoder and configure it. Get a Surface we can use for recording into.
         try {
@@ -263,14 +253,7 @@ public class CastService extends Service {
                 break;
             } else if (bufferIndex == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
                 // should happen before receiving buffers, and should only happen once
-                //if (mTrackIndex >= 0) {
-                //    throw new RuntimeException("format changed twice");
-                //}
-                //mTrackIndex = mMuxer.addTrack(mVideoEncoder.getOutputFormat());
-                //if (!mMuxerStarted && mTrackIndex >= 0) {
-                //    mMuxer.start();
-                //    mMuxerStarted = true;
-                //}
+
             } else if (bufferIndex < 0) {
                 // not sure what's going on, ignore it
             } else {

@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sun Mar 26 01:49:19 EDT 2017
+#Sun Mar 26 02:37:57 EDT 2017
 175.set=ANDROID_RESOURCE
 122.file=C\:\\Users\\Nic\\Desktop\\RPiScreen\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\anim\\abc_slide_in_top.xml
 60.set=ANDROID_RESOURCE

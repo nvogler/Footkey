@@ -19,10 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -40,11 +37,7 @@ public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
 
     private static final String PREF_COMMON = "common";
-    private static final String PREF_KEY_INPUT_RECEIVER = "input_receiver";
-    private static final String PREF_KEY_FORMAT = "format";
     private static final String PREF_KEY_RECEIVER = "receiver";
-    private static final String PREF_KEY_RESOLUTION = "resolution";
-    private static final String PREF_KEY_BITRATE = "bitrate";
 
     private static final int REQUEST_MEDIA_PROJECTION = 100;
     private static final String STATE_RESULT_CODE = "result_code";
@@ -55,7 +48,6 @@ public class MainActivity extends Activity {
     private Handler mHandler = new Handler(new HandlerCallback());
     private Messenger mMessenger = new Messenger(mHandler);
     private Messenger mServiceMessenger = null;
-    private TextView mReceiverTextView;
     private ListView mDiscoverListView;
     private ArrayAdapter<String> mDiscoverAdapter;
     private HashMap<String, String> mDiscoverdMap;
@@ -121,30 +113,11 @@ public class MainActivity extends Activity {
                 String ip = mDiscoverdMap.get(name);
                 Log.d(TAG, "Select receiver name: " + name + ", ip: " + ip);
                 mReceiverIp = ip;
-                updateReceiverStatus();
                 mContext.getSharedPreferences(PREF_COMMON, 0).edit().putString(PREF_KEY_RECEIVER, mReceiverIp).commit();
             }
         });
 
-        mReceiverTextView = (TextView) findViewById(R.id.receiver_textview);
-        final EditText ipEditText = (EditText) findViewById(R.id.ip_edittext);
-        final Button selectButton = (Button) findViewById(R.id.select_button);
-        selectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ipEditText.getText().length() > 0) {
-                    mReceiverIp = ipEditText.getText().toString();
-                    Log.d(TAG, "Using ip: " + mReceiverIp);
-                    updateReceiverStatus();
-                    mContext.getSharedPreferences(PREF_COMMON, 0).edit().putString(PREF_KEY_INPUT_RECEIVER, mReceiverIp).commit();
-                    mContext.getSharedPreferences(PREF_COMMON, 0).edit().putString(PREF_KEY_RECEIVER, mReceiverIp).commit();
-                }
-            }
-        });
-        ipEditText.setText(mContext.getSharedPreferences(PREF_COMMON, 0).getString(PREF_KEY_INPUT_RECEIVER, ""));
-
         mReceiverIp = mContext.getSharedPreferences(PREF_COMMON, 0).getString(PREF_KEY_RECEIVER, "");
-        updateReceiverStatus();
         startService();
     }
 
@@ -185,15 +158,11 @@ public class MainActivity extends Activity {
             Log.d(TAG, "==== start ====");
             if (mReceiverIp != null) {
                 startCaptureScreen();
-                //invalidateOptionsMenu();
-            } else {
-                Toast.makeText(mContext, R.string.no_receiver, Toast.LENGTH_SHORT).show();
             }
             return true;
         } else if (id == R.id.action_stop) {
             Log.d(TAG, "==== stop ====");
             stopScreenCapture();
-            //invalidateOptionsMenu();
             return true;
         }
 
@@ -221,14 +190,6 @@ public class MainActivity extends Activity {
         if (mResultData != null) {
             outState.putInt(STATE_RESULT_CODE, mResultCode);
             outState.putParcelable(STATE_RESULT_DATA, mResultData);
-        }
-    }
-
-    private void updateReceiverStatus() {
-        if (mReceiverIp.length() > 0) {
-            mReceiverTextView.setText(String.format(mContext.getString(R.string.receiver), mReceiverIp));
-        } else {
-            mReceiverTextView.setText(R.string.no_receiver);
         }
     }
 
