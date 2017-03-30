@@ -60,7 +60,7 @@ public class TextHandler {
             Log.i(TAG, "text = '" + text+"'");
 
             //case where delete was pressed
-            if (text.length() - prevString.length() == -1 && !(text.equals("") && (prevString.equals(" ") && prevString.equals("\n")))){
+            if (text.length() - prevString.length() == -1 && !(text.equals("") && (prevString.equals(" ") || prevString.equals("\n")))){
                 mblueToothManager.deleteCharacters(1);
             }
             //do nothing if there is no text
