@@ -90,7 +90,6 @@ public class BlueToothManager extends Activity {
                 Log.i(TAG, "asdasdasd");
                 ParcelUuid offeredUuid[] = device.getUuids();
                 Log.i(TAG, "123" + device);
-                //Log.i(TAG, mmDevice.toString());
                 Log.i(TAG, offeredUuid.toString());
                 Log.i(TAG, "looking at to connect to "  + " : " + device.getAddress());
                 for (ParcelUuid offUuid : offeredUuid) {
@@ -199,7 +198,10 @@ public class BlueToothManager extends Activity {
     }
 
     public void sendString(String message) {
-        if(!isConnectionReady()){return;}
+        if(!isConnectionReady()){
+            this.initiateConnection();
+            return;
+        }
         KeyEvent[] events = mKeyCharacterMap.getEvents(message.toCharArray());
         for (KeyEvent event : events) {
             write(event.getAction(), event.getKeyCode());
@@ -207,7 +209,10 @@ public class BlueToothManager extends Activity {
     }
 
     public void write(int key) {
-        if(!isConnectionReady()){return;}
+        if(!isConnectionReady()){
+            this.initiateConnection();
+            return;
+        }
         byte[] bytes = ByteBuffer.allocate(4).putInt(key).array();
         try {
             mmOutStream.write(bytes);
@@ -217,7 +222,10 @@ public class BlueToothManager extends Activity {
     }
 
     public void write(int action, int key) {
-        if(!isConnectionReady()){return;}
+        if(!isConnectionReady()){
+            this.initiateConnection();
+            return;
+        }
         byte[] bytes = ByteBuffer.allocate(8).putInt(action).putInt(key).array();
         try {
             mmOutStream.write(bytes);
@@ -226,7 +234,10 @@ public class BlueToothManager extends Activity {
         }
     }
     public void deleteCharacters(int numDeletes){
-        if(!isConnectionReady()){return;}
+        if(!isConnectionReady()){
+            this.initiateConnection();
+            return;
+        }
         ByteBuffer bytes = ByteBuffer.allocate(numDeletes * 16);
         for(int i = 0; i < numDeletes; ++i){
             bytes.putInt(KeyEvent.ACTION_DOWN).putInt(KeyEvent.KEYCODE_DEL).putInt(KeyEvent.ACTION_UP).putInt(KeyEvent.KEYCODE_DEL);

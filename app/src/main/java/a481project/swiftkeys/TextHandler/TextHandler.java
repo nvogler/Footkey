@@ -60,7 +60,7 @@ public class TextHandler {
             Log.i(TAG, "text = '" + text+"'");
 
             //case where delete was pressed
-            if (text.length() - prevString.length() == -1 && !(text.equals("") && prevString.equals(" "))){
+            if (text.length() - prevString.length() == -1 && !(text.equals("") && (prevString.equals(" ") && prevString.equals("\n")))){
                 mblueToothManager.deleteCharacters(1);
             }
             else if(s.length() == 0){
@@ -75,13 +75,19 @@ public class TextHandler {
                 mblueToothManager.deleteCharacters(prevString.length());
                 mblueToothManager.sendString(text);
             }
+            //case where characters are added to string and the last key was enter
+            //this is here to prevent double sending
+            else if(s.charAt( s.length() - 1) == '\n' && text.length() - 1 > prevString.length()){
+                mblueToothManager.sendString(text.substring(prevString.length(), s.length() - 1));
+            }
+
             //case where characters are added to string
             else if(text.length() > prevString.length()){
                 mblueToothManager.sendString(text.substring(prevString.length()));
             }
-
+            //handle characters that should clear the current word
             prevString = text;
-            if (s.length() != 0 && s.charAt(s.length() - 1) == ' ') {
+            if (s.length() != 0 && (s.charAt(s.length() - 1) == ' ' || s.charAt(s.length() - 1) == '\n')) {
                 s.clear();
                 prevString = "";
             }
