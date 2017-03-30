@@ -63,7 +63,8 @@ public class TextHandler {
             if (text.length() - prevString.length() == -1 && !(text.equals("") && (prevString.equals(" ") && prevString.equals("\n")))){
                 mblueToothManager.deleteCharacters(1);
             }
-            else if(s.length() == 0){
+            //do nothing if there is no text
+            else if(text.length() == 0){
 
             }
             else if (text.length() < prevString.length()){
@@ -76,11 +77,10 @@ public class TextHandler {
                 mblueToothManager.sendString(text);
             }
             //case where characters are added to string and the last key was enter
-            //this is here to prevent double sending
-            else if(s.charAt( s.length() - 1) == '\n' && text.length() - 1 > prevString.length()){
-                mblueToothManager.sendString(text.substring(prevString.length(), s.length() - 1));
+            //this is here to prevent double sending as enter is identified as a key event
+            else if(text.charAt( text.length() - 1) == '\n' && text.length() > prevString.length()){
+                mblueToothManager.sendString(text.substring(prevString.length(), text.length() - 1));
             }
-
             //case where characters are added to string
             else if(text.length() > prevString.length()){
                 mblueToothManager.sendString(text.substring(prevString.length()));
