@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.KeyCharacterMap;
@@ -25,6 +26,7 @@ public class BlueToothManager extends Activity {
     private final String TAG = this.getClass().getName();
     private final static int REQUEST_ENABLE_BT = 1;
 
+    private int ipAddress;
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private BluetoothDevice mmDevice;
     private UUID MY_UUID;
@@ -53,8 +55,11 @@ public class BlueToothManager extends Activity {
             Log.e(TAG, "Failed to set Bluetooth Adaptor");
         }
     }
-
-    public boolean initiateConnection() {
+    public boolean initiateConnection(int ip){
+        ipAddress = ip;
+        return initiateConnection();
+    }
+    private boolean initiateConnection() {
         Log.i(TAG, "gg");
         if (mBluetoothAdapter == null) {
             Log.e(TAG, "Cannot connect, the adaptor is not set");
@@ -122,7 +127,7 @@ public class BlueToothManager extends Activity {
             createSocket();
             createBlueToothConnection();
             getBlueToothStreams();
-
+            shareIp();
         }
 
         private void createSocket() {
@@ -179,7 +184,16 @@ public class BlueToothManager extends Activity {
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
         }
+        private void shareIp(){
+            Log.i(TAG, "sharing ip");
+            byte[] ipOut = ByteBuffer.allocate(4).putInt(ipAddress).array();
+            try {
+                mmOutStream.write(ipOut);
+            } catch (IOException e) {
 
+            }
+            Log.i(TAG, "shared ip");
+        }
         private void readData() {
             if(!isConnectionReady()){return;}
 
