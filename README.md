@@ -28,3 +28,11 @@ Sources
 =======
 * [RT Android Research Project](https://rtandroid.embedded.rwth-aachen.de/downloads/raspberry-pi/)
 * [Vysor Windows Application](https://www.vysor.io)
+
+Usage
+=====
+1) Plug physical keyboard into Raspberry Pi
+2) Select 'Prediction View' from the WinKey tray
+- Use the left foot key to insert the left prediction
+- Use the middle foot key to insert the middle prediction
+- Use the right foot key to insert the right prediction
