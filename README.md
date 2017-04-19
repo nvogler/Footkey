@@ -6,10 +6,10 @@ Requirements
 __Software for End Device__<br>
 * [Vysor Web Application for Chrome](https://chrome.google.com/webstore/detail/vysor/gidgenkbbabolejbgbpnhbimgjbffefm?hl=en-US) or [Vysor Windows Application](https://www.vysor.io)<br>
 * [WinKey](https://github.com/brandonsherbel/FootkeysTrayApp/tree/master/SwiftKeysWindowsCSharp/bin/Release)
-* [WinKey Bluetooth Manager](https://github.com/brandonsherbel/FootkeysTrayApp)
+* [WinKey Bluetooth Manager](https://github.com/mausilio/SwiftFootKeysWindowsApp)
 
 __Android Operating System For Raspberry Pi__<br>
-*working.img
+* Too large for GitHub, contact nvogler@umich.edu for an image
 
 __Hardware__<br>
 * Raspberry Pi 3 Model B
