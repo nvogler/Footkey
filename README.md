@@ -1,6 +1,6 @@
 SwiftKeys Android Application
 =======================
-There are additional components written for the end device. They can be found [here](https://github.com/brandonsherbel/FootkeysTrayApp/tree/master/SwiftKeysWindowsCSharp/bin/Release) and [here](https://github.com/mausilio/SwiftFootKeysWindowsApp)
+There are additional components written for the end device. They can be found [here](https://github.com/brandonsherbel/FootkeysTrayApp/tree/master/SwiftKeysWindowsCSharp/bin/Release) and [here](https://github.com/mausilio/SwiftFootKeysWindowsApp).
 
 Requirements
 ============
